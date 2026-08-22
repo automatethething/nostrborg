@@ -34,6 +34,12 @@ The next proof now also passes: every opaque file in a synthetic encrypted Borg 
 
 This supports the next narrow premise: a Blossom-like blob layer can store Borg repository files as opaque content-addressed blobs if a safe manifest preserves the repository-relative paths.
 
-## Next technical question
+## Follow-up result: local HTTP CAS + protected manifest proof
 
-Can the same CAS proof work through a real or locally emulated Blossom HTTP API, while encrypting/signing the manifest payload that would later live on Nostr?
+The third proof now also passes: two local Blossom-like HTTP blob stores accept `PUT /blobs/<sha256>` and serve `GET /blobs/<sha256>`. The manifest is encrypted with OpenSSL and HMAC-verified before decryption/use. After deleting one HTTP store, the script downloads every blob from the surviving store, reassembles the Borg repo, runs `borg check --verify-data`, restores, and byte-compares source files.
+
+This supports another narrow premise: the local CAS reassembly model survives an HTTP blob-store boundary and can keep the repo-path manifest out of plaintext at rest for the eventual coordination layer.
+
+## Remaining boundary
+
+The spike still does not prove compatibility with a real Blossom server implementation or Nostr relay event handling. Those are the next external-integration risks and should use synthetic data only.

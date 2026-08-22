@@ -21,11 +21,20 @@ Research spike for a sovereign encrypted Borg replication product.
 5. reassemble the Borg repository from the surviving CAS store and manifest;
 6. run `borg check --verify-data`, restore, and byte-compare.
 
+`./scripts/http-cas-restore-proof.sh` proves the same flow through a localhost HTTP blob API:
+
+1. start two local Blossom-like HTTP blob stores;
+2. upload each opaque Borg repo file with `PUT /blobs/<sha256>`;
+3. encrypt the manifest with OpenSSL and verify its HMAC before use;
+4. delete one HTTP store;
+5. download blobs from the survivor, reassemble the Borg repo, `borg check`, restore, and byte-compare.
+
 Run:
 
 ```bash
 ./tests/test_restore_spike.sh
 ./tests/test_cas_restore_spike.sh
+./tests/test_http_cas_restore_spike.sh
 ```
 
 Passing output includes:
@@ -38,12 +47,18 @@ cas-uploaded-files=<n>
 lost-cas-store-removed=ok
 reassembled-repo-borg-check=ok
 NOSTRBORG_CAS_RESTORE_PROOF_PASS
+http-cas-uploaded-files=<n>
+lost-http-cas-store-removed=ok
+manifest-hmac-verified=ok
+manifest-decrypted=ok
+http-reassembled-repo-borg-check=ok
+NOSTRBORG_HTTP_CAS_RESTORE_PROOF_PASS
 ```
 
 ## What this does not prove yet
 
-- Real Blossom HTTP upload/download semantics.
-- Nostr manifest coordination/encryption.
+- Real Blossom server compatibility.
+- Nostr event publishing/relay behavior.
 - Concurrent writers or lock handling.
 - Partial sharding / erasure coding.
 - Real user backup safety.
