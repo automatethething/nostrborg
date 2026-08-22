@@ -36,7 +36,7 @@ This supports the next narrow premise: a Blossom-like blob layer can store Borg 
 
 ## Follow-up result: local HTTP CAS + protected manifest proof
 
-The third proof now also passes: two local Blossom-like HTTP blob stores accept `PUT /blobs/<sha256>` and serve `GET /blobs/<sha256>`. The manifest is encrypted with OpenSSL and HMAC-verified before decryption/use. After deleting one HTTP store, the script downloads every blob from the surviving store, reassembles the Borg repo, runs `borg check --verify-data`, restores, and byte-compares source files.
+The third proof now also passes: two local Blossom-like HTTP blob stores accept `PUT /upload` with `X-SHA-256` and serve `GET /<sha256>`. The local server rejects mismatched hashes, unsupported transfer encodings, and invalid `Content-Length` headers. The manifest is encrypted with OpenSSL and HMAC-verified before decryption/use. After deleting one HTTP store, the script downloads every blob from the surviving store, reassembles the Borg repo, runs `borg check --verify-data`, restores, and byte-compares source files.
 
 This supports another narrow premise: the local CAS reassembly model survives an HTTP blob-store boundary and can keep the repo-path manifest out of plaintext at rest for the eventual coordination layer.
 

@@ -81,8 +81,8 @@ borg check --verify-data "$PRIMARY" >/dev/null
 while IFS= read -r -d '' file; do
   rel="${file#"$PRIMARY/"}"
   digest="$(shasum -a 256 "$file" | awk '{print $1}')"
-  curl -fsS -X PUT --data-binary "@$file" "$URL_A/blobs/$digest" >/dev/null
-  curl -fsS -X PUT --data-binary "@$file" "$URL_B/blobs/$digest" >/dev/null
+  curl -fsS -X PUT -H "X-SHA-256: $digest" --data-binary "@$file" "$URL_A/upload" >/dev/null
+  curl -fsS -X PUT -H "X-SHA-256: $digest" --data-binary "@$file" "$URL_B/upload" >/dev/null
   printf '%s\t%s\n' "$digest" "$rel" >> "$MANIFEST"
 done < <(find "$PRIMARY" -type f -print0 | sort -z)
 
@@ -111,7 +111,7 @@ while IFS=$'\t' read -r digest rel; do
     /*|*../*|../*) echo "unsafe manifest path: $rel" >&2; exit 2 ;;
   esac
   mkdir -p "$REASSEMBLED/$(dirname "$rel")"
-  curl -fsS "$URL_B/blobs/$digest" -o "$REASSEMBLED/$rel"
+  curl -fsS "$URL_B/$digest" -o "$REASSEMBLED/$rel"
   test "$(shasum -a 256 "$REASSEMBLED/$rel" | awk '{print $1}')" = "$digest"
 done < "$MANIFEST_DEC"
 

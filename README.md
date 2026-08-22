@@ -24,7 +24,7 @@ Research spike for a sovereign encrypted Borg replication product.
 `./scripts/http-cas-restore-proof.sh` proves the same flow through a localhost HTTP blob API:
 
 1. start two local Blossom-like HTTP blob stores;
-2. upload each opaque Borg repo file with `PUT /blobs/<sha256>`;
+2. upload each opaque Borg repo file with `PUT /upload` plus `X-SHA-256`, and download with `GET /<sha256>`;
 3. encrypt the manifest with OpenSSL and verify its HMAC before use;
 4. delete one HTTP store;
 5. download blobs from the survivor, reassemble the Borg repo, `borg check`, restore, and byte-compare.

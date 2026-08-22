@@ -11,24 +11,16 @@ class BlobHandler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         return
 
-    def blob_digest(self):
-        prefix = "/blobs/"
-        if not self.path.startswith(prefix):
-            return None
-        digest = self.path[len(prefix):]
-        if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
-            return None
-        return digest
+    def valid_digest(self, digest):
+        return len(digest) == 64 and all(c in "0123456789abcdef" for c in digest)
 
-    def blob_path(self):
-        digest = self.blob_digest()
-        if digest is None:
+    def blob_path(self, digest):
+        if not self.valid_digest(digest):
             return None
         return self.root / digest[:2] / digest
 
     def do_PUT(self):
-        path = self.blob_path()
-        if path is None:
+        if self.path != "/upload":
             self.send_error(404)
             return
         if self.headers.get_all("Transfer-Encoding") is not None:
@@ -43,17 +35,32 @@ class BlobHandler(BaseHTTPRequestHandler):
             self.send_error(400, "valid content length required")
             return
         length = int(raw_length)
-        body = self.rfile.read(length)
-        if hashlib.sha256(body).hexdigest() != self.blob_digest():
-            self.send_error(400, "body does not match digest")
+        claimed_digest = self.headers.get("X-SHA-256", "")
+        if not self.valid_digest(claimed_digest):
+            self.send_error(400, "valid X-SHA-256 required")
             return
+        body = self.rfile.read(length)
+        if len(body) != length:
+            self.send_error(400, "body shorter than content length")
+            return
+        actual_digest = hashlib.sha256(body).hexdigest()
+        if actual_digest != claimed_digest:
+            self.send_error(409, "body does not match digest")
+            return
+        path = self.blob_path(actual_digest)
         path.parent.mkdir(parents=True, exist_ok=True)
+        status = 200 if path.exists() else 201
         path.write_bytes(body)
-        self.send_response(201)
+        descriptor = f'{{"sha256":"{actual_digest}","size":{len(body)}}}'.encode()
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(descriptor)))
         self.end_headers()
+        self.wfile.write(descriptor)
 
     def do_GET(self):
-        path = self.blob_path()
+        digest = self.path.lstrip("/")
+        path = self.blob_path(digest)
         if path is None or not path.is_file():
             self.send_error(404)
             return
