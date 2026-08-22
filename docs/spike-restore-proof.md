@@ -28,6 +28,12 @@ This supports the narrow MVP premise: full opaque Borg repository replication ca
 
 It does **not** prove safe partial sharding, mutable metadata synchronization over Blossom, concurrent writer safety, retention guarantees, or usable recovery UX.
 
+## Follow-up result: local CAS proof
+
+The next proof now also passes: every opaque file in a synthetic encrypted Borg repo is copied into two local SHA-256 content-addressed stores, a manifest records `digest → repo-relative path`, one store is deleted, and the Borg repo is reassembled from the surviving CAS store. The reassembled repo passes `borg check --verify-data` and restores byte-identical source files.
+
+This supports the next narrow premise: a Blossom-like blob layer can store Borg repository files as opaque content-addressed blobs if a safe manifest preserves the repository-relative paths.
+
 ## Next technical question
 
-Can a local Blossom-like content-addressed store reassemble an identical Borg repository from uploaded opaque files without changing Borg behavior?
+Can the same CAS proof work through a real or locally emulated Blossom HTTP API, while encrypting/signing the manifest payload that would later live on Nostr?
