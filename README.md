@@ -45,6 +45,14 @@ Research spike for a sovereign encrypted Borg replication product.
 4. sync the compacted repo and count CAS blobs orphaned by the new manifest;
 5. verify snapshot 1 is gone and snapshot 2 still restores.
 
+`tests/test_local_relay_manifest_spike.py` proves the local Nostr relay shape:
+
+1. encrypt/authenticate a synthetic manifest payload;
+2. wrap it in a deterministic NIP-01-shaped replaceable event;
+3. publish to a localhost WebSocket relay stub;
+4. fetch by event id;
+5. decrypt and verify the manifest bytes.
+
 Run:
 
 ```bash
@@ -53,6 +61,7 @@ Run:
 ./tests/test_http_cas_restore_spike.sh
 ./tests/test_incremental_sync_spike.sh
 ./tests/test_prune_compact_spike.sh
+python3 -m unittest tests/test_local_relay_manifest_spike.py -v
 ```
 
 Passing output includes:
@@ -82,12 +91,14 @@ snapshot-1-after-prune-missing=ok
 snapshot-2-after-compact-restore=ok
 orphaned-cas-blobs=<n>
 NOSTRBORG_PRUNE_COMPACT_PROOF_PASS
+local relay manifest publish/fetch unit tests pass
 ```
 
 ## What this does not prove yet
 
 - Real Blossom server compatibility.
-- Nostr event publishing/relay behavior.
+- Real Nostr relay policy, NIP-11 behavior, and event-size limits.
+- Real Nostr key/signature handling; the local relay proof uses synthetic unsigned events.
 - CAS garbage collection policy after prune/compact identifies orphans.
 - Concurrent writers or lock handling.
 - Partial sharding / erasure coding.

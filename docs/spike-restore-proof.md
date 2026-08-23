@@ -52,6 +52,12 @@ The fifth proof now also passes: after two snapshots are synced into CAS, snapsh
 
 This supports the deletion-lifecycle premise: NostrBorg can model prune/compact as a new manifest generation, while treating blobs referenced by older manifests but not newer ones as garbage-collection candidates only after retention policy allows.
 
+## Follow-up result: local relay manifest proof
+
+The sixth proof now also passes: a synthetic manifest is encrypted/authenticated, wrapped in a deterministic NIP-01-shaped replaceable event, published to a localhost WebSocket relay stub, fetched by event id, decrypted, and byte-compared.
+
+This supports the relay-shape premise: Nostr can carry only opaque encrypted manifest content while the restore-critical data stays in verified blob storage.
+
 ## Remaining boundary
 
-The spike still does not prove a production CAS garbage-collection policy, concurrent writers/locking, compatibility with a real Blossom server implementation, or Nostr relay event handling. Those are the next risks and should use synthetic data only.
+The spike still does not prove real Nostr signatures, real relay NIP-11 policy/retention/event-size behavior, production CAS garbage-collection policy, concurrent writers/locking, or compatibility with a real Blossom server implementation. Those are the next risks and should use synthetic data only.
