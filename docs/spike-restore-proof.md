@@ -46,6 +46,12 @@ The fourth proof now also passes: after `snapshot-1` is synced into CAS, `snapsh
 
 This supports the next premise: Borg's ordinary multi-generation repository updates can map to content-addressed blob storage without re-uploading every repo file each backup cycle.
 
+## Follow-up result: prune/compact proof
+
+The fifth proof now also passes: after two snapshots are synced into CAS, snapshot 1 is deleted and `borg compact` rewrites the repository. The new manifest identifies CAS blobs no longer referenced by the compacted repository, snapshot 1 is no longer restorable from the compacted manifest, and snapshot 2 still restores byte-correctly.
+
+This supports the deletion-lifecycle premise: NostrBorg can model prune/compact as a new manifest generation, while treating blobs referenced by older manifests but not newer ones as garbage-collection candidates only after retention policy allows.
+
 ## Remaining boundary
 
-The spike still does not prove prune/compact lifecycle handling, orphaned blob garbage collection, compatibility with a real Blossom server implementation, or Nostr relay event handling. Those are the next risks and should use synthetic data only.
+The spike still does not prove a production CAS garbage-collection policy, concurrent writers/locking, compatibility with a real Blossom server implementation, or Nostr relay event handling. Those are the next risks and should use synthetic data only.

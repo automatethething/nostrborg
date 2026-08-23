@@ -37,6 +37,14 @@ Research spike for a sovereign encrypted Borg replication product.
 4. reassemble both generation manifests;
 5. restore `snapshot-1` and `snapshot-2` byte-correctly from CAS.
 
+`./scripts/prune-compact-proof.sh` proves the deletion lifecycle boundary:
+
+1. create two snapshots and sync the repo into CAS;
+2. verify the pre-prune manifest restores snapshot 1;
+3. delete snapshot 1 and run `borg compact`;
+4. sync the compacted repo and count CAS blobs orphaned by the new manifest;
+5. verify snapshot 1 is gone and snapshot 2 still restores.
+
 Run:
 
 ```bash
@@ -44,6 +52,7 @@ Run:
 ./tests/test_cas_restore_spike.sh
 ./tests/test_http_cas_restore_spike.sh
 ./tests/test_incremental_sync_spike.sh
+./tests/test_prune_compact_spike.sh
 ```
 
 Passing output includes:
@@ -68,13 +77,18 @@ incremental-upload-smaller-than-full=ok
 snapshot-1-restore=ok
 snapshot-2-restore=ok
 NOSTRBORG_INCREMENTAL_SYNC_PROOF_PASS
+snapshot-1-before-prune-restore=ok
+snapshot-1-after-prune-missing=ok
+snapshot-2-after-compact-restore=ok
+orphaned-cas-blobs=<n>
+NOSTRBORG_PRUNE_COMPACT_PROOF_PASS
 ```
 
 ## What this does not prove yet
 
 - Real Blossom server compatibility.
 - Nostr event publishing/relay behavior.
-- Prune/compact deletion lifecycle and orphaned blob garbage collection.
+- CAS garbage collection policy after prune/compact identifies orphans.
 - Concurrent writers or lock handling.
 - Partial sharding / erasure coding.
 - Real user backup safety.
