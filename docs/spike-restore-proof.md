@@ -40,6 +40,12 @@ The third proof now also passes: two local Blossom-like HTTP blob stores accept 
 
 This supports another narrow premise: the local CAS reassembly model survives an HTTP blob-store boundary and can keep the repo-path manifest out of plaintext at rest for the eventual coordination layer.
 
+## Follow-up result: incremental sync proof
+
+The fourth proof now also passes: after `snapshot-1` is synced into CAS, `snapshot-2` changes/adds source files and the second sync uploads only new/changed Borg repository-file digests. Reassembling the first manifest restores snapshot 1, and reassembling the second manifest restores both snapshot 1 and snapshot 2. Borg cache/security state is isolated per reassembled repository so the proof tests repository bytes rather than local cache history.
+
+This supports the next premise: Borg's ordinary multi-generation repository updates can map to content-addressed blob storage without re-uploading every repo file each backup cycle.
+
 ## Remaining boundary
 
-The spike still does not prove compatibility with a real Blossom server implementation or Nostr relay event handling. Those are the next external-integration risks and should use synthetic data only.
+The spike still does not prove prune/compact lifecycle handling, orphaned blob garbage collection, compatibility with a real Blossom server implementation, or Nostr relay event handling. Those are the next risks and should use synthetic data only.
