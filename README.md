@@ -96,7 +96,7 @@ local relay manifest publish/fetch unit tests pass
 
 ## Local protocol checkpoint
 
-The official `hzrd149/blossom-server` reference implementation was built from a clean public clone and started on loopback with auth and local storage enabled. BUD-01/BUD-02/BUD-06 routes were present; landing-page and CORS probes returned 200, missing blobs returned 404, and unauthenticated upload preflight returned 401. No upload was sent.
+The official `hzrd149/blossom-server` reference implementation was built from a clean public clone and started on loopback with auth and local storage enabled. BUD-01/BUD-02/BUD-06 routes were present; landing-page and CORS probes returned 200, missing blobs returned 404, and unauthenticated upload preflight returned 401. A separate auth-disabled, loopback-only staging run uploaded one bounded synthetic ciphertext, verified `PUT` 201 → `GET` 200 byte equality, and verified `DELETE` 204 → `GET` 404. No public upload was sent.
 
 Run the complete local rehearsal with:
 
