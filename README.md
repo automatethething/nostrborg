@@ -94,9 +94,19 @@ NOSTRBORG_PRUNE_COMPACT_PROOF_PASS
 local relay manifest publish/fetch unit tests pass
 ```
 
+## Local protocol checkpoint
+
+The official `hzrd149/blossom-server` reference implementation was built from a clean public clone and started on loopback with auth and local storage enabled. BUD-01/BUD-02/BUD-06 routes were present; landing-page and CORS probes returned 200, missing blobs returned 404, and unauthenticated upload preflight returned 401. No upload was sent.
+
+Run the complete local rehearsal with:
+
+```bash
+./scripts/local-rehearsal.sh
+```
+
 ## What this does not prove yet
 
-- Real Blossom server compatibility.
+- Public Blossom server compatibility, retention, or terms.
 - Real Nostr relay policy, NIP-11 behavior, and event-size limits.
 - Real Nostr key/signature handling; the local relay proof uses synthetic unsigned events.
 - CAS garbage collection policy after prune/compact identifies orphans.
