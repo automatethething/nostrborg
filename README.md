@@ -104,6 +104,8 @@ Run the complete local rehearsal with:
 ./scripts/local-rehearsal.sh
 ```
 
+With the official loopback server running, `deno run --allow-net --allow-env scripts/local-blossom-auth-proof.ts` also proves real BUD-11 signed upload auth, BUD-02 upload/download byte equality, and signed delete cleanup. The test generates its Nostr key in memory and uses only synthetic ciphertext.
+
 ## What this does not prove yet
 
 - Public Blossom server compatibility, retention, or terms.
