@@ -13,4 +13,19 @@
 - Expiry/disposition: destroy VM and revoke any ingress/DNS after interoperability proof unless explicitly promoted
 - Data boundary: synthetic encrypted fixtures only; no production data or shared credentials
 
+## Shared Finland ingress registration
+
+- VMID: `211` (verified unused)
+- VM name: `ingress`
+- Source: `debian-13-template` (VMID `200`)
+- Owner: shared Finland HTTPS ingress infrastructure; this session is the sole bootstrap writer
+- Private network: `vmbr1`, planned address `10.77.0.211/24`, gateway `10.77.0.1`
+- Allocation: 1 vCPU, 512 MiB RAM initially, 16 GiB thin-provisioned disk
+- Proxy: Caddy only; no application workloads
+- Allowed backend: `10.77.0.230:3000` only for the temporary Blossom route
+- Public ports: intended TCP/443 only; TCP/80 only if certificate issuance requires it
+- Public hostname: **owner/project DNS gate; not assigned yet**
+- External public IP for DNS A record: `95.216.36.49` (Finland Proxmox public interface)
+- Expiry/disposition: preserve VM 211 as shared ingress; remove only the temporary NostrBorg route after testing
+
 The VM is created privately first. The official Blossom server is deployed as a systemd service with local storage and BUD-11 auth enabled. A private tunnel test passed authenticated synthetic upload, download byte equality, and signed delete cleanup. No public exposure or DNS mutation has been made.
