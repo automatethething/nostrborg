@@ -21,10 +21,11 @@
 - Owner: shared Finland HTTPS ingress infrastructure; this session is the sole bootstrap writer
 - Private network: `vmbr1`, planned address `10.77.0.211/24`, gateway `10.77.0.1`
 - Allocation: 1 vCPU, 512 MiB RAM initially, 16 GiB thin-provisioned disk
-- Proxy: Caddy only; no application workloads
+- Proxy: Caddy only; no application workloads (installed, route not configured)
 - Allowed backend: `10.77.0.230:3000` only for the temporary Blossom route
 - Public ports: intended TCP/443 only; TCP/80 only if certificate issuance requires it
 - Public hostname: **owner/project DNS gate; not assigned yet**
+- Current exposure: none; Proxmox has no TCP/443 or TCP/80 forwarding rule
 - External public IP for DNS A record: `95.216.36.49` (Finland Proxmox public interface)
 - Expiry/disposition: preserve VM 211 as shared ingress; remove only the temporary NostrBorg route after testing
 
