@@ -29,4 +29,4 @@
 - External public IP for DNS A record: `95.216.36.49` (Finland Proxmox public interface)
 - Expiry/disposition: preserve VM 211 as shared ingress; remove only the temporary NostrBorg route after testing
 
-The VM is created privately first. The official Blossom server is deployed as a systemd service with local storage and BUD-11 auth enabled. A private tunnel test passed authenticated synthetic upload, download byte equality, and signed delete cleanup. No public exposure or DNS mutation has been made.
+The VM is created privately first. The official Blossom server is deployed as a systemd service with local storage and BUD-11 auth enabled. A private tunnel test passed authenticated synthetic upload, download byte equality, and signed delete cleanup. The public test then passed over HTTPS through ingress: BUD-06 preflight, BUD-11 upload auth, BUD-01 download byte equality, and BUD-02 signed delete/404. No public Nostr relay was used. Ingress Caddy measured approximately 43 MiB RSS at idle; Blossom used approximately 150 MiB across its Deno processes. The disposable backend and route are now scheduled for teardown; shared ingress VM 211 is retained.
