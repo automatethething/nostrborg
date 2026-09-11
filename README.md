@@ -106,6 +106,8 @@ Run the complete local rehearsal with:
 
 With the official loopback server running, `deno run --allow-net --allow-env scripts/local-blossom-auth-proof.ts` also proves real BUD-11 signed upload auth, BUD-02 upload/download byte equality, and signed delete cleanup. The test generates its Nostr key in memory and uses only synthetic ciphertext.
 
+The disposable Finland ingress test used `scripts/public-blossom-auth-proof.ts` against the owner-controlled HTTPS hostname. It is hard-coded to that hostname, generates one fixed 64 KiB random synthetic ciphertext in memory, performs one authenticated upload/download/delete cycle, and does not publish to Nostr.
+
 ## What this does not prove yet
 
 - Public Blossom server compatibility, retention, or terms.
