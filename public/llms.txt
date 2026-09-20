@@ -1,0 +1,25 @@
+# NostrBorg
+
+Sovereign encrypted Borg replication. Encrypted repository files are stored as opaque content-addressed blobs across independent replicas. Losing one replica must not lose the backup.
+
+## Canonical URL
+https://nostrborg.flowstate.market/
+
+## What it does
+- Public restore drill: create synthetic ciphertext blobs, upload to two replicas, destroy replica A, restore from replica B, byte-compare.
+- Local Borg proofs remain in this repository for real `borg check --verify-data` restore after replica loss.
+- ConsentKeys is used only for an optional operator dashboard. Recovery keys never go to the hosted app.
+
+## Key pages
+- / — product promise and public restore drill
+- /dashboard — optional ConsentKeys operator view
+- /privacy — privacy policy
+- /terms — terms, including ConsentKeys identity-provider change rule
+- /api/drill — POST synthetic dual-replica restore drill
+- /api/health — liveness
+- /sitemap.xml — sitemap
+- /robots.txt — crawler policy
+
+## Data model
+- Hosted drill uses ephemeral synthetic ciphertext in a single request. No Borg passphrases or plaintext backups are stored.
+- Authenticated identity, when configured, is ConsentKeys `sub` only.

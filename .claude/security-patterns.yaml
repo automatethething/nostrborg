@@ -1,0 +1,46 @@
+patterns:
+  - rule_name: possible_hardcoded_secret
+    substrings:
+      - "sk_live_"
+      - "AKIA"
+      - "CONSENTKEYS_CLIENT_SECRET"
+      - "SUPABASE_SERVICE_ROLE_KEY"
+      - "PAYRAILS_API_KEY"
+      - "PAYRAILS_WEBHOOK_SECRET"
+      - "POSTHOG_PERSONAL_API_KEY"
+    reminder: "Possible hardcoded secret. Load credentials from environment or secret manager; never commit real secrets."
+
+  - rule_name: direct_stripe_usage
+    substrings:
+      - "from 'stripe'"
+      - 'from "stripe"'
+      - "require('stripe')"
+      - 'require("stripe")'
+      - "new Stripe("
+    reminder: "Flowstate apps must not use Stripe directly. Use Petrichor Labs PayRails."
+
+  - rule_name: unsafe_dom_write
+    substrings:
+      - "dangerouslySetInnerHTML"
+      - ".innerHTML ="
+      - "document.write"
+      - "insertAdjacentHTML"
+    reminder: "Unsafe DOM write. Confirm content is trusted and sanitized; avoid rendering user-controlled HTML."
+
+  - rule_name: shell_exec
+    substrings:
+      - "child_process.exec"
+      - "execSync("
+      - "spawnSync("
+      - "os.system("
+    reminder: "Command execution is security-sensitive. Never pass raw user input to shell commands."
+
+  - rule_name: unsafe_eval
+    substrings:
+      - "eval("
+      - "new Function("
+    reminder: "Dynamic code execution is almost never acceptable. Remove it or prove the input is trusted and constrained."
+
+  - rule_name: raw_authorization_logging
+    regex: "console\\.(log|info|warn|error)\\([^\\n]*(authorization|cookie|access_token|refresh_token|id_token|session|code_verifier|nonce)"
+    reminder: "Do not log auth headers, cookies, sessions, OAuth verifier/nonce/state, or bearer tokens. Redact before logging."

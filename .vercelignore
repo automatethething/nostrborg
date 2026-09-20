@@ -1,0 +1,10 @@
+.pnpm-store
+.env
+.env.local
+.next
+node_modules
+docs
+tests
+scripts/*.sh
+scripts/*.py
+scripts/*.ts
