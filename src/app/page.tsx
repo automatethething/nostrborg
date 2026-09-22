@@ -46,8 +46,7 @@ export default async function HomePage() {
       <RestoreDrill />
 
       <p style={{ marginTop: 24, color: "var(--muted)" }}>
-        Signed-in operators can keep a dashboard bookmark after ConsentKeys is registered for this app. The public drill
-        does not require an account.
+        Sign in with ConsentKeys to open the operator dashboard. The public restore drill does not require an account.
       </p>
 
       <footer className="footer">

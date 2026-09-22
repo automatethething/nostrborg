@@ -3,7 +3,7 @@
 Sovereign encrypted Borg replication. Encrypted repository files are stored as opaque content-addressed blobs across independent replicas. Losing one replica must not lose the backup.
 
 ## Canonical URL
-https://nostrborg.flowstate.market/
+https://nostrborg.vercel.app/
 
 ## What it does
 - Public restore drill: create synthetic ciphertext blobs, upload to two replicas, destroy replica A, restore from replica B, byte-compare.
@@ -12,14 +12,15 @@ https://nostrborg.flowstate.market/
 
 ## Key pages
 - / — product promise and public restore drill
-- /dashboard — optional ConsentKeys operator view
+- /dashboard — ConsentKeys operator view with saved drill receipts and pay-intent
 - /privacy — privacy policy
 - /terms — terms, including ConsentKeys identity-provider change rule
-- /api/drill — POST synthetic dual-replica restore drill
+- /api/drill — POST synthetic dual-replica restore drill; signed-in users get a metadata receipt saved
+- /api/history — GET/POST signed-in drill metadata only
 - /api/health — liveness
 - /sitemap.xml — sitemap
 - /robots.txt — crawler policy
 
 ## Data model
 - Hosted drill uses ephemeral synthetic ciphertext in a single request. No Borg passphrases or plaintext backups are stored.
-- Authenticated identity, when configured, is ConsentKeys `sub` only.
+- Authenticated identity is ConsentKeys `sub` only.

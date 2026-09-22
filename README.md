@@ -2,7 +2,7 @@
 
 Sovereign encrypted Borg replication. Encrypted repository files become opaque content-addressed blobs. Losing one replica must not lose the backup.
 
-Hosted app: `https://nostrborg.flowstate.market`
+Hosted app: `https://nostrborg.vercel.app`
 
 ## Production test
 
@@ -26,7 +26,7 @@ curl -sS -X POST http://localhost:3000/api/drill
 curl -sS http://localhost:3000/api/health
 ```
 
-ConsentKeys sign-in is optional and only used for the operator dashboard. Recovery keys never go to the hosted app.
+ConsentKeys sign-in is live for the operator dashboard. Signed-in drills save pass/fail metadata only. Recovery keys never go to the hosted app.
 
 ## Local Borg proofs
 

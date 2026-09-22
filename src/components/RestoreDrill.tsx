@@ -19,7 +19,7 @@ type DrillReceipt = {
 
 const STORAGE_KEY = "nostrborg-last-drill";
 
-export function RestoreDrill() {
+export function RestoreDrill({ onComplete }: { onComplete?: () => void }) {
   const [running, setRunning] = useState(false);
   const [receipt, setReceipt] = useState<DrillReceipt | null>(null);
 
@@ -54,6 +54,7 @@ export function RestoreDrill() {
         blobs: payload.blobs ?? 0,
         elapsed_ms: payload.elapsedMs ?? 0,
       });
+      onComplete?.();
     } catch {
       setReceipt({ ok: false, error: "Could not reach the restore drill." });
       captureEvent("drill_failed", { status: 0 });
