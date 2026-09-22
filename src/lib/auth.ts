@@ -16,7 +16,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       issuer,
       checks: ["pkce", "state"],
       authorization: {
-        url: `${issuer}/auth`,
+        url: "https://auth.consentkeys.com/auth",
         params: { scope: "openid profile email" },
       },
       token: {
