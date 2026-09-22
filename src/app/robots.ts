@@ -1,9 +1,9 @@
 import type { MetadataRoute } from "next";
+import { APP_URL } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = process.env.NEXT_PUBLIC_APP_URL || "https://nostrborg.flowstate.market";
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${APP_URL}/sitemap.xml`,
   };
 }

@@ -16,6 +16,7 @@ export default function PrivacyPage() {
       <ul>
         <li>ConsentKeys identity is pseudonymous. We treat `sub` as the account id and may display the provider’s generated name or email fields.</li>
         <li>The public restore drill uses short-lived synthetic ciphertext in a single request. Blob bytes are not written to a database.</li>
+        <li>If you sign in, recent restore-drill pass/fail metadata may be saved for about 30 days so the operator dashboard can show history. That record is not ciphertext, recovery keys, or a Borg repository.</li>
         <li>Privacy-safe analytics events such as page views, CTA clicks, and drill completion may be sent to a first-party PostHog host.</li>
       </ul>
       <h2>What we do not store</h2>
